@@ -78,6 +78,26 @@ class Plant implements Comparable<Plant> {
         return this.health;
     }
 
+    public int getTempLowbound(){
+        return this.tempLowbound;
+    }
+
+    public int getTempUpperbound() {
+        return tempUpperbound;
+    }
+
+    public int getWaterLowbound(){
+        return waterLowbound;
+    }
+
+    public int getWaterUpperbound(){
+        return waterUpperbound;
+    }
+
+    public String[] getParasites(){
+        return parasites;
+    }
+
     @Override
     public int compareTo(Plant other) {
         return Integer.compare(this.health, other.health);

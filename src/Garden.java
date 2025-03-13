@@ -3,7 +3,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
-class Garden {
+
+public class Garden {
     private int temperature;
     private int rainAmount;
     private String[] insects;
@@ -60,6 +61,16 @@ class Garden {
 
     public void setInsect(String[] insects) {
         this.insects = insects;
+    }
+
+    public void killInsect(String insect){
+        List<String> result = new ArrayList<>();
+
+        for(String item : insects)
+            if(!insect.equals(item))
+                result.add(item);
+
+        this.insects = result.toArray(new String[0]);
     }
 
     public void addPlant(Plant plant){

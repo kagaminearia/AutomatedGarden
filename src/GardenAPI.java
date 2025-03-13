@@ -3,7 +3,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Random;
 
 class GardenAPI {
@@ -11,12 +10,21 @@ class GardenAPI {
     private String configFilename = "input.txt";
     private Random random = new Random();
 
+    private WateringSystem wateringSystem;
+    private HeatingSystem heatingSystem;
+    private PestControl pestControl;
+
 
     void initialize() throws IOException {
         int initialTemp = Config.GARDEN_TEMP_LOW_BOUND + random.nextInt(Config.GARDEN_TEMP_RANGE);
         int initialRain = Config.GARDEN_RAIN_LOW_BOUND + random.nextInt(Config.GARDEN_RAIN_RANGE);
         String[] initialInsects = {};
         garden = new Garden(initialTemp, initialRain, initialInsects);
+
+        // Initialize 3 systems.
+        heatingSystem = new HeatingSystem(Config.GARDEN_TEMP_LOW_BOUND,Config.GARDEN_TEMP_LOW_BOUND+Config.GARDEN_TEMP_RANGE);
+        wateringSystem = new WateringSystem(Config.GARDEN_RAIN_LOW_BOUND,Config.GARDEN_RAIN_LOW_BOUND+Config.GARDEN_RAIN_RANGE);
+        pestControl = new PestControl();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(configFilename))) {
             String line;
@@ -33,7 +41,15 @@ class GardenAPI {
                 garden.addPlant(plant);
             }
         }
+
+        // Adjust setting for supply systems.
+        heatingSystem.adjustSetting(garden.getPlants());
+        wateringSystem.adjustSetting(garden.getPlants());
+        pestControl.updateSetting(garden.getPlants());
+
     }
+
+
 
     void newDay() {
         int ifTemp = random.nextInt(2);
@@ -56,6 +72,10 @@ class GardenAPI {
             String[] added = newInsects.toArray(new String[0]);
             parasite(added);
         }
+
+        wateringSystem.maintainWater(garden);
+        heatingSystem.maintainTemp(garden);
+        pestControl.killInsects(garden);
 
         dayPass();
         logState();
