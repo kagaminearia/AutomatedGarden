@@ -29,7 +29,7 @@ public class PestControl {
             for(String insect: plant.getParasites()){
                 if(!this.parasites.contains(insect)){
                     this.parasites.add(insect);
-                    System.out.print(insect);
+                    // System.out.print(insect);
                 }
             }
         }

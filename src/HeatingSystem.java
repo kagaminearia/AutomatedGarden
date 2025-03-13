@@ -37,7 +37,7 @@ public class HeatingSystem {
             }
         }
 
-        System.out.println(tempLowBound + "," + tempUpperBound);
+        // System.out.println(tempLowBound + "," + tempUpperBound);
     }
 
 }

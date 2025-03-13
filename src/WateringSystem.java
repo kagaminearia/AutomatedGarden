@@ -39,7 +39,7 @@ public class WateringSystem {
             }
         }
 
-        System.out.println(waterLowBound + "," + waterUpperBound);
+        // System.out.println(waterLowBound + "," + waterUpperBound);
     }
 
 }
