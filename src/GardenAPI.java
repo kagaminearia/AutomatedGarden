@@ -16,20 +16,23 @@ class GardenAPI {
 
 
     void initialize() throws IOException {
-        int initialTemp = Config.GARDEN_TEMP_LOW_BOUND + random.nextInt(Config.GARDEN_TEMP_RANGE);
-        int initialRain = Config.GARDEN_RAIN_LOW_BOUND + random.nextInt(Config.GARDEN_RAIN_RANGE);
-        String[] initialInsects = {};
-        garden = new Garden(initialTemp, initialRain, initialInsects);
+        int initialTemp = Config.GARDEN_TEMP_LOWER_BOUND + random.nextInt(Config.GARDEN_TEMP_RANGE);
+        int initialRain = Config.GARDEN_RAIN_LOWER_BOUND + random.nextInt(Config.GARDEN_RAIN_RANGE);
+//        String[] initialInsects = {};
+        garden = new Garden(initialTemp, initialRain);
 
         // Initialize 3 systems.
-        heatingSystem = new HeatingSystem(Config.GARDEN_TEMP_LOW_BOUND,Config.GARDEN_TEMP_LOW_BOUND+Config.GARDEN_TEMP_RANGE);
-        wateringSystem = new WateringSystem(Config.GARDEN_RAIN_LOW_BOUND,Config.GARDEN_RAIN_LOW_BOUND+Config.GARDEN_RAIN_RANGE);
+        heatingSystem = new HeatingSystem(Config.GARDEN_TEMP_LOWER_BOUND,Config.GARDEN_TEMP_LOWER_BOUND +Config.GARDEN_TEMP_RANGE);
+        wateringSystem = new WateringSystem(Config.GARDEN_RAIN_LOWER_BOUND,Config.GARDEN_RAIN_LOWER_BOUND +Config.GARDEN_RAIN_RANGE);
         pestControl = new PestControl();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(configFilename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
+                if (parts.length < 6) {
+                    throw new IOException("Invalid input format: " + line);
+                }
                 String name = parts[0];
                 int tempLowbound = Integer.parseInt(parts[1]);
                 int tempUpperbound = Integer.parseInt(parts[2]);
@@ -37,17 +40,20 @@ class GardenAPI {
                 int waterLowbound = Integer.parseInt(parts[4]);
                 int waterUpperbound = Integer.parseInt(parts[5]);
 
-                Plant plant = new Plant(name, tempLowbound, tempUpperbound, parasites, waterLowbound, waterUpperbound);
-                garden.addPlant(plant);
+                garden.addPlantToArea(name, tempLowbound, tempUpperbound, parasites, waterLowbound, waterUpperbound);
             }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Invalid input file: " + e.getMessage());
         }
 
         // Adjust setting for supply systems.
-        heatingSystem.adjustSetting(garden.getPlants());
-        wateringSystem.adjustSetting(garden.getPlants());
-        pestControl.updateSetting(garden.getPlants());
+//        heatingSystem.adjustSetting(garden.getPlants());
+//        wateringSystem.adjustSetting(garden.getPlants());
+//        pestControl.updateSetting(garden.getPlants());
 
     }
+
+
 
 
 
@@ -56,26 +62,30 @@ class GardenAPI {
         int ifRain = random.nextInt(2);
         int ifInsect = random.nextInt(2);
         if(ifTemp == 1){
-            int newTemp = Config.GARDEN_TEMP_LOW_BOUND + random.nextInt(Config.GARDEN_TEMP_RANGE);
+            int newTemp = Config.GARDEN_TEMP_LOWER_BOUND + random.nextInt(Config.GARDEN_TEMP_RANGE);
             temperature(newTemp);
         }
         if(ifRain == 1){
-            int newRain = Config.GARDEN_RAIN_LOW_BOUND + random.nextInt(Config.GARDEN_RAIN_RANGE);
+            int newRain = Config.GARDEN_RAIN_LOWER_BOUND + random.nextInt(Config.GARDEN_RAIN_RANGE);
             rain(newRain);
         }
-        if(ifInsect == 1){
-            List<String> newInsects = new ArrayList<>();
-            for(String i : Config.GARDEN_POSSIBLE_INSECTS){
-                int binary = random.nextInt(2);
-                if(binary==1)newInsects.add(i);
+        // insects differ in areas
+        for (Area area : garden.getAreas()) {
+            ifInsect = random.nextInt(2);
+            if(ifInsect == 1){
+                List<String> newInsects = new ArrayList<>();
+                for (String insect : Config.GARDEN_POSSIBLE_INSECTS) {
+                    if (random.nextInt(2) == 1) { // 50% chance for each insect
+                        newInsects.add(insect);
+                    }
+                }
+                area.setInsects(newInsects.toArray(new String[0])); // Assign new insects to area
             }
-            String[] added = newInsects.toArray(new String[0]);
-            parasite(added);
-        }
 
-        wateringSystem.maintainWater(garden);
-        heatingSystem.maintainTemp(garden);
-        pestControl.killInsects(garden);
+        }
+//        wateringSystem.maintainWater(garden);
+//        heatingSystem.maintainTemp(garden);
+//        pestControl.killInsects(garden);
 
         dayPass();
         logState();
@@ -96,18 +106,24 @@ class GardenAPI {
     }
 
     // generate parasite in garden
-    void parasite(String[] insects){
-        garden.setInsect(insects);
-    }
+//    void parasite(String[] insects){
+//        garden.setInsect(insects);
+//    }
 
     // log garden's current state
-    void logState(){
+    void logState() {
         System.out.println("-------- Current Garden State --------");
         System.out.println("Temperature: " + garden.getTemperature());
         System.out.println("Rain Amount: " + garden.getRainAmount());
-        System.out.println("Insects: " + String.join(", ", garden.getInsects()));
-        System.out.println("Plants Alive: " + garden.getPlants().size());
+        System.out.println("Plants Alive: " + garden.getAllAlivePlants().size());
         System.out.println("Plants Dead: " + garden.getDeadPlants().size());
+
+        // Print all alive plant names
+        System.out.println("Alive Plants:");
+        for (Plant plant : garden.getAllAlivePlants()) {
+            System.out.println("- " + plant.getName()); // Assuming `getName()` is a method in the `Plant` class
+        }
+
         System.out.println();
     }
 }

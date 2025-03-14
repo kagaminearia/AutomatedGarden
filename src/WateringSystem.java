@@ -24,12 +24,12 @@ public class WateringSystem {
             }
         }
         else{
-            Plant lowestHealthPlant = garden.getLowestHealthPlant();
+            Plant lowestHealthPlant = garden.findAreaWithLowestHealthPlant().getPlants().get(0);
             if(Objects.nonNull(lowestHealthPlant)) {
                 // System.out.println(lowestHealthPlant.getHealth() + ", waterlb " + lowestHealthPlant.getWaterLowbound() + ", waterub " + lowestHealthPlant.getWaterUpperbound());
 
                 if (lowestHealthPlant.getHealth() < Config.PLANT_HEALTH) {
-                    watering(garden, (lowestHealthPlant.getWaterLowbound() + lowestHealthPlant.getWaterUpperbound()) / 2);
+                    watering(garden, (lowestHealthPlant.getWaterLowerbound() + lowestHealthPlant.getWaterUpperbound()) / 2);
                 }
             }
         }
@@ -44,8 +44,8 @@ public class WateringSystem {
     // Assume such range exist.
     public boolean adjustSetting(PriorityQueue<Plant> plants){
         for(Plant plant: plants){
-            if(plant.getWaterLowbound() > waterLowBound){
-                this.waterLowBound = plant.getWaterLowbound();
+            if(plant.getWaterLowerbound() > waterLowBound){
+                this.waterLowBound = plant.getWaterLowerbound();
             }
             if(plant.getWaterUpperbound() < waterUpperBound){
                 this.waterUpperBound = plant.getWaterUpperbound();

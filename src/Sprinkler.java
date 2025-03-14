@@ -8,9 +8,9 @@ public class Sprinkler {
     }
 
     // Sprinkle a certain type of pesticide to kill that kind of insect
-    public void sprayPesticide(Garden garden, String insect){
+    public void sprayPesticide(Area area, String insect){
 
-        garden.killInsect(insect);
+        area.killInsect(insect);
 
     }
 }

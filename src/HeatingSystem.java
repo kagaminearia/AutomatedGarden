@@ -30,11 +30,11 @@ public class HeatingSystem {
             }
         }
         else{
-            Plant lowestHealthPlant = garden.getLowestHealthPlant();
+            Plant lowestHealthPlant = garden.findAreaWithLowestHealthPlant().getPlants().get(0);
             if(Objects.nonNull(lowestHealthPlant)){
                 // System.out.println(lowestHealthPlant.getHealth() + ", templowbound " + lowestHealthPlant.getTempLowbound() + ", tempupperbound " + lowestHealthPlant.getTempUpperbound());
                 if(lowestHealthPlant.getHealth() < Config.PLANT_HEALTH){
-                    heating(garden, (lowestHealthPlant.getTempLowbound()+lowestHealthPlant.getTempUpperbound())/2);
+                    heating(garden, (lowestHealthPlant.getTempLowerbound()+lowestHealthPlant.getTempUpperbound())/2);
                 }
             }
 
@@ -52,8 +52,8 @@ public class HeatingSystem {
     // Assume such range exist.
     public boolean adjustSetting(PriorityQueue<Plant> plants){
         for(Plant plant: plants){
-            if(plant.getTempLowbound() > tempLowBound){
-                this.tempLowBound = plant.getTempLowbound();
+            if(plant.getTempLowerbound() > tempLowBound){
+                this.tempLowBound = plant.getTempLowerbound();
             }
             if(plant.getTempUpperbound() < tempUpperBound){
                 this.tempUpperBound = plant.getTempUpperbound();

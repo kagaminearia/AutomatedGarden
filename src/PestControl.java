@@ -13,12 +13,12 @@ public class PestControl {
     }
 
     // Kill all the harmful insects
-    public void killInsects(Garden garden){
+    public void killInsects(Area area){
         // Get the information from the sensor.
-        String[] insects = this.pestSensor.getPest(garden);
+        String[] insects = this.pestSensor.getPest(area);
         for(String insect: insects){
             if (this.parasites.contains(insect)){
-                this.sprinkler.sprayPesticide(garden, insect);
+                this.sprinkler.sprayPesticide(area, insect);
             }
         }
     }

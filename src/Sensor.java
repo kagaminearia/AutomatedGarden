@@ -7,8 +7,8 @@ public class Sensor {
         return garden.getRainAmount();
     }
 
-    public String[] getPest(Garden garden){
-        return garden.getInsects();
+    public String[] getPest(Area area){
+        return area.getInsects();
     }
 
 

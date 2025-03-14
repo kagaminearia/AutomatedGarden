@@ -3,7 +3,7 @@ import java.util.List;
 
 class Plant implements Comparable<Plant> {
     private String name; // plant name
-    private int tempLowbound; // if temperature lower than this value, it would hurt plant
+    private int tempLowerbound; // if temperature lower than this value, it would hurt plant
     private int tempUpperbound; // if temperature higher than this value, it would hurt plant
     private String[] parasites; // insects that would hurt plant
     private int waterLowbound; // if plant get water that lower than this value, it would hurt plant
@@ -11,9 +11,9 @@ class Plant implements Comparable<Plant> {
     private int health; // plant health, will decrease when the environment violate the requirement
     private boolean isAlive; // if plant's health decrease to 0, set isAlive false
 
-    public Plant(String name,int tempLowbound, int tempUpperbound, String[] parasites, int waterLowbound, int waterUpperbound){
+    public Plant(String name,int tempLowerbound, int tempUpperbound, String[] parasites, int waterLowbound, int waterUpperbound){
         this.name = name;
-        this.tempLowbound = tempLowbound;
+        this.tempLowerbound = tempLowerbound;
         this.tempUpperbound = tempUpperbound;
         this.parasites = parasites;
         this.waterLowbound = waterLowbound;
@@ -39,9 +39,7 @@ class Plant implements Comparable<Plant> {
 
         // If health is not full and no negative impact, increase health
         if (health < Config.PLANT_HEALTH &&
-                temperature >= tempLowbound && temperature <= tempUpperbound &&
-                waterAmount >= waterLowbound && waterAmount <= waterUpperbound &&
-                currParasite==0) {
+                meetTemperatureCondition(temperature) && meetWaterCondition(waterAmount) && currParasite==0) {
             health++;
         }
         // Check if plant is dead
@@ -52,7 +50,7 @@ class Plant implements Comparable<Plant> {
 
     // checking environment functions
     private boolean meetTemperatureCondition(int temp){
-        if (temp < tempLowbound || temp > tempUpperbound) {
+        if (temp < tempLowerbound || temp > tempUpperbound) {
             return false;
         }
         return true;
@@ -78,15 +76,19 @@ class Plant implements Comparable<Plant> {
         return this.health;
     }
 
-    public int getTempLowbound(){
-        return this.tempLowbound;
+    public String getName() {
+        return this.name;
+    }
+
+    public int getTempLowerbound(){
+        return this.tempLowerbound;
     }
 
     public int getTempUpperbound() {
         return tempUpperbound;
     }
 
-    public int getWaterLowbound(){
+    public int getWaterLowerbound(){
         return waterLowbound;
     }
 
