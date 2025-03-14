@@ -1,3 +1,4 @@
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class HeatingSystem {
@@ -12,7 +13,7 @@ public class HeatingSystem {
     }
 
     // Maintain the temp within bound.
-    void maintainTemp(Garden garden){
+    public void maintainTemp(Garden garden){
         int currentTemp = tempSensor.getTemp(garden);
         if(currentTemp < tempLowBound || currentTemp > tempUpperBound){
             heating(garden, tempLowBound + (tempUpperBound - tempLowBound)/2);
@@ -20,14 +21,36 @@ public class HeatingSystem {
 
     }
 
+    // Retrieve the lowest health plant, set the temp to its temp range's middle.
+    public void maintainTemp(Garden garden, boolean checkIfDying){
+        if(!checkIfDying){
+            int currentTemp = tempSensor.getTemp(garden);
+            if(currentTemp < tempLowBound || currentTemp > tempUpperBound){
+                heating(garden, tempLowBound + (tempUpperBound - tempLowBound)/2);
+            }
+        }
+        else{
+            Plant lowestHealthPlant = garden.getLowestHealthPlant();
+            if(Objects.nonNull(lowestHealthPlant)){
+                // System.out.println(lowestHealthPlant.getHealth() + ", templowbound " + lowestHealthPlant.getTempLowbound() + ", tempupperbound " + lowestHealthPlant.getTempUpperbound());
+                if(lowestHealthPlant.getHealth() < Config.PLANT_HEALTH){
+                    heating(garden, (lowestHealthPlant.getTempLowbound()+lowestHealthPlant.getTempUpperbound())/2);
+                }
+            }
+
+
+        }
+
+    }
+
     // Heat the garden to a assigned value.
-    void heating(Garden garden, int targetTemp){
+    public void heating(Garden garden, int targetTemp){
         garden.setTemperature(targetTemp);
     }
 
     // Adjust the temp setting according to the plants' information.
     // Assume such range exist.
-    void adjustSetting(PriorityQueue<Plant> plants){
+    public boolean adjustSetting(PriorityQueue<Plant> plants){
         for(Plant plant: plants){
             if(plant.getTempLowbound() > tempLowBound){
                 this.tempLowBound = plant.getTempLowbound();
@@ -37,7 +60,10 @@ public class HeatingSystem {
             }
         }
 
-        // System.out.println(tempLowBound + "," + tempUpperBound);
+        System.out.println(tempLowBound + "," + tempUpperBound);
+
+        return this.tempLowBound > this.tempUpperBound;
+
     }
 
 }
