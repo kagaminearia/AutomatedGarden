@@ -50,6 +50,16 @@ class Area {
 
     @Override
     public String toString() {
-        return "Area: " + plantName + " | Plant Count: " + plants.size() + " | Insects: " + String.join(", ", insects);
+        StringBuilder sb = new StringBuilder();
+        sb.append("Area: ").append(plantName)
+                .append(" | Plant Count: ").append(plants.size())
+                .append(" | Insects: ").append(String.join(", ", insects))
+                .append(" | Plant Health: ");
+
+        for (Plant plant : plants) {
+            sb.append(plant.getHealth()).append(" ");
+        }
+
+        return sb.toString();
     }
 }

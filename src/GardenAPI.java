@@ -118,10 +118,10 @@ class GardenAPI {
         System.out.println("Plants Alive: " + garden.getAllAlivePlants().size());
         System.out.println("Plants Dead: " + garden.getDeadPlants().size());
 
-        // Print all alive plant names
-        System.out.println("Alive Plants:");
-        for (Plant plant : garden.getAllAlivePlants()) {
-            System.out.println("- " + plant.getName()); // Assuming `getName()` is a method in the `Plant` class
+        // Log the state of each area
+        System.out.println("\nAreas:");
+        for (Area area : garden.getAreas()) {
+            System.out.println(area.toString()); // Use the toString() method of Area
         }
 
         System.out.println();
