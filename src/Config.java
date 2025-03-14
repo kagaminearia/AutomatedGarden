@@ -1,5 +1,5 @@
 public class Config {
-    public static final int PLANT_HEALTH = 100;
+    public static final int PLANT_HEALTH = 30;
     public static final int GARDEN_RAIN_LOW_BOUND = 0;
     public static final int GARDEN_RAIN_RANGE = 50;
     public static final int GARDEN_TEMP_LOW_BOUND = 40;

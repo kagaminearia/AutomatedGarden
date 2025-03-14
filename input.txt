@@ -1,3 +1,25 @@
-Rose;50;80;Aphid,Spider Mite;20;40
-Tomato;60;90;Whitefly;30;50
-Lavender;40;70;Aphid;10;30
+Rose;50;80;Aphid,Spider Mite;10;40
+Tomato;60;90;Whitefly;1;20
+Lavender;80;90;Aphid;9;30
+Sunflower;40;50;Aphid;10;35
+Lavender;76;101;Aphid,Spider Mite;8;32
+Daisy;53;97;Thrips;12;29
+Hibiscus;45;60;Aphid;7;27
+Tomato;65;95;Whitefly;2;21
+Lotus;68;93;Mealybug;11;28
+Rose;96;108;Spider Mite;9;27
+Carnation;87;100;Thrips;5;31
+Orchid;80;91;Aphid;11;29
+Daisy;55;100;Aphid;15;28
+Chrysanthemum;87;102;Aphid;8;33
+Marigold;66;88;Aphid;10;30
+Hibiscus;44;61;Aphid;5;20
+Lily;80;95;Aphid;3;25
+Tomato;66;97;Aphid;1;15
+Lavender;78;102;Aphid;3;25
+Daffodil;55;89;Aphid;5;33
+Sunflower;85;111;Aphid;2;29
+Lavender;62;96;Aphid;20;35
+Lotus;70;92;Aphid,Whitefly;11;21
+Carnation;55;85;Aphid;6;23
+Lavender;83;90;Aphid;9;32
