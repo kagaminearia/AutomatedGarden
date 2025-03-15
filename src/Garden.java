@@ -21,7 +21,19 @@ public class Garden {
         this.deadAreas = new ArrayList<>();
     }
 
+    // Synchronize all areas with the same temp.
+    public void syncTemp(int temp){
+        for (Area area : areaMap.values()){
+            area.setCurrentTemp(temp);
+        }
+    }
 
+    // Synchronize all areas with the same water amount.
+    public void syncWater(int water){
+        for (Area area : areaMap.values()){
+            area.setCurrentTemp(water);
+        }
+    }
 
 
     // experience everyday, change plant's situation base on garden's environment
@@ -32,7 +44,7 @@ public class Garden {
             List<Plant> deadInThisArea = new ArrayList<>();
 
             for (Plant plant : new ArrayList<>(area.getPlants())) {
-                plant.impact(temperature, rainAmount, area.getInsects());
+                plant.impact(area.getCurrentTemp(), area.getCurrentWater(), area.getInsects());
                 if (!plant.ifAlive()) {
                     deadPlants.add(plant);
                     deadInThisArea.add(plant);
@@ -59,6 +71,7 @@ public class Garden {
         Area area = areaMap.get(name); // Look up the area by plant name
         if (area == null) {
             // If the area doesn't exist, create a new one
+
             area = new Area(name, tempLowerbound, tempUpperbound, parasites, waterLowerbound, waterUpperbound);
             areaMap.put(name, area); // Add the new area to the Map
         }
@@ -98,6 +111,7 @@ public class Garden {
 
     public void setTemperature(int temperature) {
         this.temperature = temperature;
+        syncTemp(this.temperature);
     }
 
     public int getRainAmount() {
@@ -106,6 +120,7 @@ public class Garden {
 
     public void setRainAmount(int rainAmount) {
         this.rainAmount = rainAmount;
+        syncWater(this.rainAmount);
     }
 
 //    public String[] getInsects() {

@@ -1,9 +1,19 @@
 public class Sprinkler {
 
+    /*
     // Start watering, until reach a certain value.
     public void waterToAmount(Garden garden, int targetWater){
 
         garden.setRainAmount(targetWater);
+
+    }
+
+     */
+
+    // Start watering, until reach a certain value.
+    public void waterToAmount(Area area, int targetWater){
+
+        area.setCurrentWater(targetWater);
 
     }
 

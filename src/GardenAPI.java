@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -10,21 +11,18 @@ class GardenAPI {
     private String configFilename = "input.txt";
     private Random random = new Random();
 
+    /*
     private WateringSystem wateringSystem;
     private HeatingSystem heatingSystem;
     private PestControl pestControl;
 
+     */
 
     void initialize() throws IOException {
         int initialTemp = Config.GARDEN_TEMP_LOWER_BOUND + random.nextInt(Config.GARDEN_TEMP_RANGE);
         int initialRain = Config.GARDEN_RAIN_LOWER_BOUND + random.nextInt(Config.GARDEN_RAIN_RANGE);
 //        String[] initialInsects = {};
         garden = new Garden(initialTemp, initialRain);
-
-        // Initialize 3 systems.
-        heatingSystem = new HeatingSystem(Config.GARDEN_TEMP_LOWER_BOUND,Config.GARDEN_TEMP_LOWER_BOUND +Config.GARDEN_TEMP_RANGE);
-        wateringSystem = new WateringSystem(Config.GARDEN_RAIN_LOWER_BOUND,Config.GARDEN_RAIN_LOWER_BOUND +Config.GARDEN_RAIN_RANGE);
-        pestControl = new PestControl();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(configFilename))) {
             String line;
@@ -46,16 +44,12 @@ class GardenAPI {
             System.err.println("Invalid input file: " + e.getMessage());
         }
 
-        // Adjust setting for supply systems.
-//        heatingSystem.adjustSetting(garden.getPlants());
-//        wateringSystem.adjustSetting(garden.getPlants());
-//        pestControl.updateSetting(garden.getPlants());
+        // Update setting for each area after all inputs are complete
+        for (Area area : garden.getAreas()) {
+            area.adjustSetting();
+        }
 
     }
-
-
-
-
 
     void newDay() {
         int ifTemp = random.nextInt(2);
@@ -86,6 +80,11 @@ class GardenAPI {
 //        wateringSystem.maintainWater(garden);
 //        heatingSystem.maintainTemp(garden);
 //        pestControl.killInsects(garden);
+
+        // Maintenance
+        for (Area area : garden.getAreas()) {
+            area.maintenance();
+        }
 
         dayPass();
         logState();
